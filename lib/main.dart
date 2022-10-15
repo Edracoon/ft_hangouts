@@ -7,6 +7,7 @@ import 'package:path/path.dart'; // Used for join support
 import 'package:flutter/material.dart'; // Flutter global import
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
   runApp( const MyApp() );
 }
 
@@ -143,8 +144,8 @@ class DatabaseHelper {
     Database db = await instance.database;
     var contacts = await db.query('contacts', orderBy: 'number');
 
-    List<Contact> contactList = contacts.isEmpty ? [] : 
-      contacts.map((e) => Contact.fromMap(e)).toList();
+    List<Contact> contactList = contacts.isEmpty ? [] : contacts.map((e) => Contact.fromMap(e)).toList();
+    return contactList;
   }
 
 }
