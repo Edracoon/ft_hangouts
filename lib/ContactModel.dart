@@ -21,7 +21,7 @@ class Contact {
     return {
       'number': number,
       'firstname': firstname,
-      'lastname': lastname,
+      // 'lastname': lastname,
       'email': email,
     };
   }
