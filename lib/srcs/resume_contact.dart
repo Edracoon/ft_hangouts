@@ -62,7 +62,7 @@ class _ResumeContactState extends State<ResumeContact> {
           flex: 2,
           child: 
           IconButton(
-            icon: const Icon(Icons.settings, size: 25.0),
+            icon: const Icon(Icons.more_horiz, size: 25.0),
             onPressed: () {
               print("Pressed settings button");
             },
