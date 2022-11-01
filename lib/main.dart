@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart'; // Flutter global import
-import 'bodies/HomeContact.dart';
-import 'bodies/AddContact.dart';
+import 'srcs/home_contact.dart';
+import 'srcs/add_contact.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();

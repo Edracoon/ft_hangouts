@@ -1,8 +1,9 @@
 // ignore_for_file: file_names
 
 import 'package:flutter/material.dart'; // Flutter global import
-import '../ContactModel.dart';
-import '../DatabaseHelper.dart';
+import '../contact_model.dart';
+import '../database_helper.dart';
+import './resume_contact.dart';
 
 // Defining what is the Callback type function that
 // will triger my parent widget
@@ -64,16 +65,21 @@ class _HomeContactState extends State<HomeContact> {
               if (!snapshot.hasData) {
                 return const Center(child: Text('Loading...'));
               }
-              return snapshot.data!.isEmpty
-                ? const Center(child: Text('No contact yet !'),)
-                : ListView(
-                children: snapshot.data!.map((contact) {
-                  return Center(
-                    child: ListTile(
-                      title: Text(contact.number),
-                    )
-                  );
-                }).toList(),
+              return (snapshot.data!.isEmpty
+                ? const Center(child: Text('No contact yet !'))
+                : ListView.separated(
+                    separatorBuilder: (context, index) => const Divider(
+                      color: Color.fromARGB(255, 143, 143, 143),
+                      height: 10,
+                      indent: 25,
+                      endIndent: 25,
+                    ),
+                    itemCount: snapshot.data!.length,
+                    itemBuilder: (context, index) => Padding(
+                      padding: const EdgeInsets.all(15.0),
+                      child: ResumeContact(contact: snapshot.data![index]),
+                    ),
+                  )
               );
             }
           ),

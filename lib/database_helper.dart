@@ -4,7 +4,7 @@ import 'package:path_provider/path_provider.dart';  // Used for GetApplicationDo
 // ignore: depend_on_referenced_packages
 import 'package:path/path.dart';                    // Used for join support
 
-import 'ContactModel.dart';                         // Our Contact Model
+import 'contact_model.dart';                         // Our Contact Model
 
 class DatabaseHelper {
   // It create an interface where _database is
@@ -31,15 +31,14 @@ class DatabaseHelper {
   // Script on create where we can init tables
   Future _onCreate(Database db, int version) async {
     await db.execute('''
-      CREATE TABLE contacts (
-        id INTEGER PRIMARY KEY AUTO_INCREMENT,
+      CREATE TABLE IF NOT EXISTS contacts (
+        id INTEGER PRIMARY KEY,
         number TEXT NOT NULL,
         firstname TEXT,
         lastname TEXT,
         email TEXT,
         birthDate TEXT
-      )
-    ''');
+      )''');
   }
 
   Future<List<Contact>> getContacts() async {

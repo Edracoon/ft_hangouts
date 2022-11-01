@@ -14,15 +14,17 @@ class Contact {
     number: json['number'],
     firstname: json['firstname'],
     lastname: json['lastname'],
-    email: json['email']
+    email: json['email'],
+    birthDate: json['birthDate']
   );
 
   Map<String, dynamic> toObject() {
     return {
       'number': number,
       'firstname': firstname,
-      // 'lastname': lastname,
+      'lastname': lastname,
       'email': email,
+      'birthDate': birthDate
     };
   }
 }
