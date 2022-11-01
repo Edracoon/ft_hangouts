@@ -1,11 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:ft_hangouts/contact_model.dart';
 
+// Defining what is the Callback type function that
+// will triger my parent widget
+typedef Callback = void Function(int redirectPage, Contact? contact);
+
 class ResumeContact extends StatefulWidget {
+  // The callback variable
+  final Callback callback;
 
   final Contact contact;
 
-  const ResumeContact({Key? key, required this.contact}) : super(key: key);
+  const ResumeContact({Key? key, required this.callback, required this.contact}) : super(key: key);
 
   @override
   State<ResumeContact> createState() => _ResumeContactState();
@@ -65,6 +71,7 @@ class _ResumeContactState extends State<ResumeContact> {
             icon: const Icon(Icons.more_horiz, size: 25.0),
             onPressed: () {
               print("Pressed settings button");
+              widget.callback(2, widget.contact);
             },
           ),
         ),

@@ -1,5 +1,3 @@
-// ignore_for_file: file_names
-
 import 'package:flutter/material.dart'; // Flutter global import
 import '../contact_model.dart';
 import '../database_helper.dart';
@@ -7,7 +5,7 @@ import './resume_contact.dart';
 
 // Defining what is the Callback type function that
 // will triger my parent widget
-typedef Callback = void Function(int redirectPage);
+typedef Callback = void Function(int redirectPage, Contact? contact);
 
 class HomeContact extends StatefulWidget {
 
@@ -69,7 +67,7 @@ class _HomeContactState extends State<HomeContact> {
                 ? const Center(child: Text('No contact yet !'))
                 : ListView.separated(
                     separatorBuilder: (context, index) => const Divider(
-                      color: Color.fromARGB(255, 143, 143, 143),
+                      color: Color.fromARGB(255, 42, 42, 42),
                       height: 10,
                       indent: 25,
                       endIndent: 25,
@@ -77,7 +75,7 @@ class _HomeContactState extends State<HomeContact> {
                     itemCount: snapshot.data!.length,
                     itemBuilder: (context, index) => Padding(
                       padding: const EdgeInsets.all(15.0),
-                      child: ResumeContact(contact: snapshot.data![index]),
+                      child: ResumeContact(callback: widget.callback, contact: snapshot.data![index]),
                     ),
                   )
               );
@@ -89,7 +87,7 @@ class _HomeContactState extends State<HomeContact> {
         backgroundColor: Colors.deepPurple,
         hoverColor: Colors.deepPurple.shade600,
         child: const Icon(Icons.add),
-        onPressed: () { widget.callback(1); },
+        onPressed: () { widget.callback(1, null); },
       ),
     );
   }

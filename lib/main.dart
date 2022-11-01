@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart'; // Flutter global import
+import 'package:ft_hangouts/contact_model.dart';
 import 'srcs/home_contact.dart';
 import 'srcs/add_contact.dart';
+import 'srcs/edit_contact.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -16,9 +18,15 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
 
-  int     pageIndex = 0;
+  int           pageIndex = 0;
+  late Contact  _selectedContact;
 
-  void  onPageChange(int newIndex) => setState(() => pageIndex = newIndex);
+  void  onPageChange(int newIndex, Contact? selectedContact) {
+    setState(() => pageIndex = newIndex);
+    if (selectedContact != null) {
+      setState(() => _selectedContact = selectedContact);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -28,7 +36,10 @@ class _MyAppState extends State<MyApp> {
         scaffoldBackgroundColor: Colors.white,
         textTheme: Theme.of(context).textTheme.apply(bodyColor: Colors.black, fontSizeFactor: 1.1)
       ),
-      home: pageIndex == 0 ? HomeContact(callback: onPageChange) : AddContact(callback: onPageChange)
+      home: pageIndex == 0
+        ? HomeContact(callback: onPageChange) : pageIndex == 1 ? 
+        AddContact(callback: onPageChange) :
+        EditContact(callback: onPageChange, contact: _selectedContact)
     );
   }
 }

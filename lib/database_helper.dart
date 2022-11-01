@@ -55,4 +55,9 @@ class DatabaseHelper {
     return await db.insert('contacts', contact.toObject());
   }
 
+  Future<int> update(Contact contact) async {
+    Database db = await instance.database;
+    return db.update('contacts', contact.toObject(), where: 'id = ?', whereArgs: [contact.id]);
+  }
+
 }

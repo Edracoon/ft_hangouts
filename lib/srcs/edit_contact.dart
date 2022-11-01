@@ -1,5 +1,3 @@
-// ignore_for_file: file_names
-
 import 'package:flutter/material.dart'; // Flutter global import
 import 'package:flutter/services.dart'; // For TextInputFormatter and FilteringTextInputFormatter for forms
 
@@ -12,36 +10,42 @@ import '../database_helper.dart';  // Database
 // will triger my parent widget
 typedef Callback = void Function(int redirectPage, Contact? contact);
 
-class AddContact extends StatefulWidget {
+class EditContact extends StatefulWidget {
 
   // The callback variable
   final Callback callback;
 
+  final Contact contact;
+
   // The constructor
-  const AddContact({Key? key, required this.callback}) : super(key: key);
+  const EditContact({Key? key, required this.callback, required this.contact }) : super(key: key);
 
   @override
-  State<AddContact> createState() => _AddContactState();
+  State<EditContact> createState() => _EditContactState();
 }
 
-class _AddContactState extends State<AddContact> {
-
-  final nbFocus = FocusNode();
-  final nbCtrl = TextEditingController();
-  final _text = '';
+class _EditContactState extends State<EditContact> {
+  final _text = ''; // just used to update things reactively
+  late Contact _contact;
   bool _submitted = false;
 
-  final fnFocus = FocusNode();
+  final nbCtrl = TextEditingController();
   final fnCtrl = TextEditingController();
-
-  final lnFocus = FocusNode();
   final lnCtrl = TextEditingController();
-
-  final emFocus = FocusNode();
   final emCtrl = TextEditingController();
-
-  final bdFocus = FocusNode();
   final bdCtrl = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    _contact = widget.contact;
+    nbCtrl.text = _contact.number.substring(1);
+    fnCtrl.text = _contact.firstname;
+    lnCtrl.text = _contact.lastname;
+    emCtrl.text = _contact.email;
+    bdCtrl.text = _contact.birthDate;
+  }
+
 
   final ScrollController scrollCtrl = ScrollController();
 
@@ -52,7 +56,6 @@ class _AddContactState extends State<AddContact> {
   final _formKey = GlobalKey<FormState>();  
 
   getInputError(String text) {
-    // final phoneRegex = RegExp(r'^\s*[1-9](?:[\s.-]*\d{2}){4}$');
 
     if (nbCtrl.text.isEmpty) { return 'Can\'t be empty'; }
     if (_initialCountryData?.getCorrectMask(_initialCountryData?.countryCode).length != nbCtrl.text.length)
@@ -60,21 +63,21 @@ class _AddContactState extends State<AddContact> {
     return null;
   }
 
-  void registerContact() async {
+  void updateContact() async {
     setState(() => _submitted = true);
     // It returns true if the form is valid, otherwise returns false
     if (_formKey.currentState!.validate() && getInputError(nbCtrl.text) == null) {
       // If the form is valid, display a Snackbar.
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-        content: Text('Contact is registered !'),
+        content: Text('Saved !'),
         backgroundColor: Colors.green,
       ));
 
       nbCtrl.text = "0${nbCtrl.text}";
-      Contact newContact = Contact(number: nbCtrl.text, firstname: fnCtrl.text, lastname: lnCtrl.text,
+      Contact editedContact = Contact(id: _contact.id, number: nbCtrl.text, firstname: fnCtrl.text, lastname: lnCtrl.text,
                                     email: emCtrl.text, birthDate: bdCtrl.text);
 
-      await DatabaseHelper.instance.add(newContact);
+      await DatabaseHelper.instance.update(editedContact);
       widget.callback(0, null);
     }
   }
@@ -84,7 +87,7 @@ class _AddContactState extends State<AddContact> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.deepPurple,
-        title: const Text('New contact'),
+        title: const Text('Edit contact'),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_outlined),
           onPressed: () {  widget.callback(0, null); },
@@ -105,7 +108,6 @@ class _AddContactState extends State<AddContact> {
                 children: [
                   TextFormField(
                     controller: fnCtrl,
-                    focusNode: fnFocus,
                     decoration: const InputDecoration(
                       icon: Icon(Icons.person),
                       hintText: 'Firstname of the contact',
@@ -189,7 +191,7 @@ class _AddContactState extends State<AddContact> {
                   Container(
                     padding: const EdgeInsets.only(left: 0.0, top: 60.0),
                     child: ElevatedButton(
-                      onPressed: () => registerContact(),
+                      onPressed: () => updateContact(),
                       child: const Text('Register'),
                     )
                   ),
