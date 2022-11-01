@@ -12,26 +12,38 @@ class ResumeContact extends StatefulWidget {
 }
 
 class _ResumeContactState extends State<ResumeContact> {
+
+  String getContactDescription(Contact contact) {
+    if (contact.firstname == "" && contact.lastname == "") {
+      return contact.number;
+    }
+    String ret = "${contact.firstname} ${contact.lastname}";
+    if (ret.length > 20) {
+      ret = "${ret.substring(0, 17)}...";
+    }
+    return ret;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Row(
       children: [
         const Expanded (
-          flex: 1,
+          flex: 2,
           child: Icon(Icons.person, size: 35.0),
         ),
         const Expanded (
           flex: 1,
-          child: Text(" "),
+          child: Text(""),
         ),
         Expanded (
-          flex: 6,
-          child: Text(widget.contact.firstname == "" && widget.contact.lastname == "" ? widget.contact.number :  "${widget.contact.firstname} ${widget.contact.lastname}"),
+          flex: 8,
+          child: Text(getContactDescription(widget.contact)),
         ),
         Expanded (
           flex: 2,
           child: IconButton(
-            icon: const Icon(Icons.message, size: 20.0),
+            icon: const Icon(Icons.message, size: 25.0),
             onPressed: () {
               print("Pressed message button");
             },
@@ -40,7 +52,7 @@ class _ResumeContactState extends State<ResumeContact> {
         Expanded (
           flex: 2,
           child: IconButton(
-            icon: const Icon(Icons.call, size: 20.0),
+            icon: const Icon(Icons.call, size: 25.0),
             onPressed: () {
               print("Pressed call button");
             },
@@ -50,7 +62,7 @@ class _ResumeContactState extends State<ResumeContact> {
           flex: 2,
           child: 
           IconButton(
-            icon: const Icon(Icons.settings, size: 20.0),
+            icon: const Icon(Icons.settings, size: 25.0),
             onPressed: () {
               print("Pressed settings button");
             },

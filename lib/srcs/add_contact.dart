@@ -104,6 +104,9 @@ class _AddContactState extends State<AddContact> {
                       focusedBorder: UnderlineInputBorder(
                         borderSide: BorderSide(color: Colors.deepPurple)),
                     ),
+                    inputFormatters: [
+                      LengthLimitingTextInputFormatter(18)
+                    ],
                   ),
                   TextFormField(
                     controller: lnCtrl,
@@ -112,6 +115,9 @@ class _AddContactState extends State<AddContact> {
                       hintText: 'Lastname of the contact',
                       labelText: 'Lastname',
                     ),
+                    inputFormatters: [
+                      LengthLimitingTextInputFormatter(18)
+                    ],
                   ),
                   Row(
                     children: [
@@ -154,6 +160,9 @@ class _AddContactState extends State<AddContact> {
                       hintText: 'E-mail of the contact',
                       labelText: 'E-mail',
                     ),
+                    inputFormatters: [
+                      LengthLimitingTextInputFormatter(30)
+                    ],
                   ),
                   TextFormField(
                     controller: bdCtrl,
@@ -162,6 +171,9 @@ class _AddContactState extends State<AddContact> {
                       hintText: 'Enter a birth date',
                       labelText: 'Birth Date',
                     ),
+                    inputFormatters: [
+                      LengthLimitingTextInputFormatter(18)
+                    ],
                   ),
                   Container(
                     padding: const EdgeInsets.only(left: 0.0, top: 60.0),
