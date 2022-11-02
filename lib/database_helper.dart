@@ -60,4 +60,8 @@ class DatabaseHelper {
     return db.update('contacts', contact.toObject(), where: 'id = ?', whereArgs: [contact.id]);
   }
 
+  Future<int> delete(Contact contact) async {
+    Database db = await instance.database;
+    return db.delete('contacts', where: 'id = ?', whereArgs: [contact.id]);
+  }
 }

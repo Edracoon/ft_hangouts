@@ -26,7 +26,7 @@ class EditContact extends StatefulWidget {
 
 class _EditContactState extends State<EditContact> {
   final _text = ''; // just used to update things reactively
-  late Contact _contact;
+  late Contact contact;
   bool _submitted = false;
 
   final nbCtrl = TextEditingController();
@@ -38,12 +38,12 @@ class _EditContactState extends State<EditContact> {
   @override
   void initState() {
     super.initState();
-    _contact = widget.contact;
-    nbCtrl.text = _contact.number.substring(1);
-    fnCtrl.text = _contact.firstname;
-    lnCtrl.text = _contact.lastname;
-    emCtrl.text = _contact.email;
-    bdCtrl.text = _contact.birthDate;
+    contact = widget.contact;
+    nbCtrl.text = contact.number.substring(1);
+    fnCtrl.text = contact.firstname;
+    lnCtrl.text = contact.lastname;
+    emCtrl.text = contact.email;
+    bdCtrl.text = contact.birthDate;
   }
 
 
@@ -74,12 +74,22 @@ class _EditContactState extends State<EditContact> {
       ));
 
       nbCtrl.text = "0${nbCtrl.text}";
-      Contact editedContact = Contact(id: _contact.id, number: nbCtrl.text, firstname: fnCtrl.text, lastname: lnCtrl.text,
+      Contact editedContact = Contact(id: contact.id, number: nbCtrl.text, firstname: fnCtrl.text, lastname: lnCtrl.text,
                                     email: emCtrl.text, birthDate: bdCtrl.text);
 
       await DatabaseHelper.instance.update(editedContact);
       widget.callback(0, null);
     }
+  }
+
+  void deleteContact() async {
+    Contact editedContact = Contact(id: contact.id, number: nbCtrl.text);
+    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+      content: Text('Deleted !'),
+      backgroundColor: Colors.green,
+    ));
+    await DatabaseHelper.instance.delete(editedContact);
+    widget.callback(0, null);
   }
 
   @override
@@ -88,10 +98,17 @@ class _EditContactState extends State<EditContact> {
       appBar: AppBar(
         backgroundColor: Colors.deepPurple,
         title: const Text('Edit contact'),
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back_outlined),
-          onPressed: () {  widget.callback(0, null); },
-        ),
+        leading: Row(children: [
+          IconButton(
+            icon: const Icon(Icons.arrow_back_outlined),
+            onPressed: () { widget.callback(0, null); }
+          ),
+          IconButton(
+            icon: const Icon(Icons.delete),
+            onPressed: () { deleteContact(); }
+          )
+        ]),
+        leadingWidth: 100,
       ),
       body: Scrollbar(
         controller: scrollCtrl,

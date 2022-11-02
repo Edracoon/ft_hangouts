@@ -52,6 +52,7 @@ class _ResumeContactState extends State<ResumeContact> {
             icon: const Icon(Icons.message, size: 25.0),
             onPressed: () {
               print("Pressed message button");
+              widget.callback(3, widget.contact);
             },
           ),
         ),
