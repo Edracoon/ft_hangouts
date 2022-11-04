@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 // import 'package:flutter/src/widgets/framework.dart';
 // import 'package:flutter/src/foundation/key.dart';
-// import 'package:telephony/telephony.dart';
+import 'package:telephony/telephony.dart';
 import '../contact_model.dart';
 
 // Defining what is the Callback type function that
@@ -23,8 +23,21 @@ class Chat extends StatefulWidget {
 
 class _ChatState extends State<Chat> {
 
+  final Telephony telephony = Telephony.instance;
+
   late Contact contact;
   final scrollCtrl = ScrollController();
+
+  String getContactDescription(Contact contact) {
+    if (contact.firstname == "" && contact.lastname == "") {
+      return contact.number;
+    }
+    String ret = "${contact.firstname} ${contact.lastname}";
+    if (ret.length > 20) {
+      ret = "${ret.substring(0, 17)}...";
+    }
+    return ret;
+  }
 
   @override
   void initState() {
@@ -37,7 +50,7 @@ class _ChatState extends State<Chat> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.deepPurple,
-        title: const Text('New contact'),
+        title: Text(getContactDescription(contact)),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_outlined),
           onPressed: () {  widget.callback(0, null); },

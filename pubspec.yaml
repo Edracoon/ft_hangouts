@@ -41,6 +41,7 @@ dependencies:
 
   # Phone number input
   flutter_multi_formatter: ^2.9.0
+  telephony: ^0.2.0
 
 dev_dependencies:
   flutter_test:

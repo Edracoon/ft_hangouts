@@ -39,6 +39,7 @@ class _EditContactState extends State<EditContact> {
   void initState() {
     super.initState();
     contact = widget.contact;
+
     nbCtrl.text = contact.number.substring(1);
     fnCtrl.text = contact.firstname;
     lnCtrl.text = contact.lastname;
@@ -49,17 +50,13 @@ class _EditContactState extends State<EditContact> {
 
   final ScrollController scrollCtrl = ScrollController();
 
-  PhoneCountryData? _initialCountryData;
-
-  // Create a global key that uniquely identifies the Form widget  
+  // Create a global key that uniquely identifies the Form widget
   // and allows validation of the form.  
   final _formKey = GlobalKey<FormState>();  
 
   getInputError(String text) {
-
     if (nbCtrl.text.isEmpty) { return 'Can\'t be empty'; }
-    if (_initialCountryData?.getCorrectMask(_initialCountryData?.countryCode).length != nbCtrl.text.length)
-    { return 'Incorrect format number'; }
+    if (nbCtrl.text.length != 13) { return 'Incorrect format number'; }
     return null;
   }
 
@@ -73,8 +70,7 @@ class _EditContactState extends State<EditContact> {
         backgroundColor: Colors.green,
       ));
 
-      nbCtrl.text = "0${nbCtrl.text}";
-      Contact editedContact = Contact(id: contact.id, number: nbCtrl.text, firstname: fnCtrl.text, lastname: lnCtrl.text,
+      Contact editedContact = Contact(id: contact.id, number: "0${nbCtrl.text}", firstname: fnCtrl.text, lastname: lnCtrl.text,
                                     email: emCtrl.text, birthDate: bdCtrl.text);
 
       await DatabaseHelper.instance.update(editedContact);
@@ -150,32 +146,20 @@ class _EditContactState extends State<EditContact> {
                   Row(
                     children: [
                       Expanded(
-                        flex: 3,
-                        child: CountryDropdown(
-                          printCountryName: true,
-                          initialCountryCode: 'FR',
-                          onCountrySelected: (PhoneCountryData countryData) {
-                            setState(() {
-                              _initialCountryData = countryData;
-                            });
-                          },
-                        ),
-                      ),
-                      Expanded(
-                        flex: 5,
+                        flex: 10,
                         child: TextFormField(
                           controller: nbCtrl,
                           decoration: InputDecoration(
                             icon: const Icon(Icons.phone),
                             hintText: 'Enter a phone number',
-                            labelText: 'Phone',
+                            labelText: 'Phone (+33)',
                             errorText: _submitted ? getInputError(nbCtrl.text) : null,
                           ),
                           keyboardType: TextInputType.phone,
                           inputFormatters: [
                             PhoneInputFormatter(
                               allowEndlessPhone: false,
-                              defaultCountryCode: _initialCountryData?.countryCode,
+                              defaultCountryCode: 'FR',
                             )
                           ],
                           onChanged: (text) => setState(() => _text)

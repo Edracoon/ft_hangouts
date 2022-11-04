@@ -51,7 +51,6 @@ class _ResumeContactState extends State<ResumeContact> {
           child: IconButton(
             icon: const Icon(Icons.message, size: 25.0),
             onPressed: () {
-              print("Pressed message button");
               widget.callback(3, widget.contact);
             },
           ),
@@ -61,7 +60,6 @@ class _ResumeContactState extends State<ResumeContact> {
           child: IconButton(
             icon: const Icon(Icons.call, size: 25.0),
             onPressed: () {
-              print("Pressed call button");
             },
           ),
         ),
@@ -71,7 +69,6 @@ class _ResumeContactState extends State<ResumeContact> {
           IconButton(
             icon: const Icon(Icons.more_horiz, size: 25.0),
             onPressed: () {
-              print("Pressed settings button");
               widget.callback(2, widget.contact);
             },
           ),
