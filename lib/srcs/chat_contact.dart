@@ -28,17 +28,6 @@ class _ChatState extends State<Chat> {
   late Contact contact;
   final scrollCtrl = ScrollController();
 
-  String getContactDescription(Contact contact) {
-    if (contact.firstname == "" && contact.lastname == "") {
-      return contact.number;
-    }
-    String ret = "${contact.firstname} ${contact.lastname}";
-    if (ret.length > 20) {
-      ret = "${ret.substring(0, 17)}...";
-    }
-    return ret;
-  }
-
   @override
   void initState() {
     super.initState();
@@ -93,4 +82,15 @@ class _ChatState extends State<Chat> {
       )
     );
   }
+}
+
+String getContactDescription(Contact contact) {
+  if (contact.firstname == "" && contact.lastname == "") {
+    return contact.number;
+  }
+  String ret = "${contact.firstname} ${contact.lastname}";
+  if (ret.length > 20) {
+    ret = "${ret.substring(0, 17)}...";
+  }
+  return ret;
 }

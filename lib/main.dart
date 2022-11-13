@@ -1,3 +1,8 @@
+import 'package:flutter_localizations/flutter_localizations.dart';
+// We could add this after the flutter gen-l10n command
+// See this -> https://medium.com/@echolaojue/how-to-make-l10n-with-flutter-fd61e21e61d8
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 import 'package:flutter/material.dart'; // Flutter global import
 import 'package:ft_hangouts/contact_model.dart';
 import 'package:ft_hangouts/srcs/chat_contact.dart';
@@ -38,6 +43,16 @@ class _MyAppState extends State<MyApp> {
         scaffoldBackgroundColor: Colors.white,
         textTheme: Theme.of(context).textTheme.apply(bodyColor: Colors.black, fontSizeFactor: 1.1)
       ),
+      localizationsDelegates: const [
+        AppLocalizations.delegate,
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
+      supportedLocales: const [
+        Locale('en', ''),
+        Locale('fr', ''),
+      ],
       home: pageIndex == 0 ?
           HomeContact(callback: onPageChange)
           : pageIndex == 1 ? 
@@ -45,7 +60,7 @@ class _MyAppState extends State<MyApp> {
           : pageIndex == 2 ? 
           EditContact(callback: onPageChange, contact: _selectedContact)
           :
-          Chat(callback: onPageChange, contact: _selectedContact)
+          Chat(callback: onPageChange, contact: _selectedContact),
     );
   }
 }
