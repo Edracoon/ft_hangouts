@@ -1,16 +1,15 @@
 # ft_hangouts
 
-A new Flutter project.
+Little mobile app using Flutter
 
-## Getting Started
+-> Create contacts
 
-This project is a starting point for a Flutter application.
+-> Manage contacts (Delete, Edit, Add)
 
-A few resources to get you started if this is your first Flutter project:
+-> Send SMS to contacts
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+-> Call contacts
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+-> Change language
+
+-> Change Theme color
