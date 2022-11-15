@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-// import 'package:flutter/src/widgets/framework.dart';
-// import 'package:flutter/src/foundation/key.dart';
+
 import 'package:telephony/telephony.dart';
 import '../contact_model.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 
 // Defining what is the Callback type function that
 // will triger my parent widget
@@ -56,12 +57,12 @@ class _ChatState extends State<Chat> {
               color: Colors.white,
               child: Row(
                 children: [
-                  const SizedBox(width: 15,),
-                  const Expanded(
+                  const SizedBox(width: 15),
+                  Expanded(
                     child: TextField(
                       decoration: InputDecoration(
-                        hintText: "Write message...",
-                        hintStyle: TextStyle(color: Colors.black54),
+                        hintText: AppLocalizations.of(context).writeMessage,
+                        hintStyle: const TextStyle(color: Colors.black54),
                         border: InputBorder.none
                       ),
                     ),
@@ -69,9 +70,9 @@ class _ChatState extends State<Chat> {
                   const SizedBox(width: 15,),
                   FloatingActionButton(
                     onPressed: (){},
-                    child: Icon(Icons.send,color: Colors.white,size: 18,),
                     backgroundColor: Colors.blue,
                     elevation: 0,
+                    child: const Icon(Icons.send,color: Colors.white,size: 18,),
                   ),
                 ],
                 

@@ -1,3 +1,25 @@
 {
-	"setInBackground": "The app was set in background at"
+	"setInBackground": "The app was set in background at",
+	"register": "Register",
+	"contactRegistered": "Contact is registered !",
+	"firstName": "Firstname",
+	"firstNameLabel": "Firstname of the contact",
+	"lastName": "Lastname",
+	"lastNameLabel": "Lastname of the contact",
+	"phone": "Phone",
+	"phoneLabel": "Enter a phone number",
+	"email": "E-mail",
+	"emailLabel": "E-mail of the contact",
+	"birthDate": "Birth Date",
+	"birthDateLabel": "Enter a birth date",
+	"newContact": "New contact",
+	"editContact": "Edit contact",
+	"writeMessage": "Write a message...",
+	"search": "Search",
+	"loading": "Loading ...",
+	"noContact": "No contact yet!",
+	"saved": "Saved !",
+	"deleted": "Deleted !",
+	"emptyError": "Can't be empty",
+	"formatError": "Incorrect format number"
 }

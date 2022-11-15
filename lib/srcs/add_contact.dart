@@ -2,6 +2,7 @@ import 'package:flutter/material.dart'; // Flutter global import
 import 'package:flutter/services.dart'; // For TextInputFormatter and FilteringTextInputFormatter for forms
 
 import 'package:flutter_multi_formatter/flutter_multi_formatter.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../contact_model.dart';    // Contact Model
 import '../database_helper.dart';  // Database     
@@ -49,8 +50,8 @@ class _AddContactState extends State<AddContact> {
 
   getInputError(String text) {
     // final phoneRegex = RegExp(r'^\s*[1-9](?:[\s.-]*\d{2}){4}$');
-    if (nbCtrl.text.isEmpty) { return 'Can\'t be empty'; }
-    if (nbCtrl.text.length != 13) { return 'Incorrect format number'; }
+    if (nbCtrl.text.isEmpty) { return AppLocalizations.of(context).emptyError; }
+    if (nbCtrl.text.length != 13) { return AppLocalizations.of(context).formatError; }
     return null;
   }
 
@@ -59,8 +60,8 @@ class _AddContactState extends State<AddContact> {
     // It returns true if the form is valid, otherwise returns false
     if (_formKey.currentState!.validate() && getInputError(nbCtrl.text) == null) {
       // If the form is valid, display a Snackbar.
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-        content: Text('Contact is registered !'),
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text(AppLocalizations.of(context).contactRegistered),
         backgroundColor: Colors.green,
       ));
 
@@ -77,7 +78,7 @@ class _AddContactState extends State<AddContact> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.deepPurple,
-        title: const Text('New contact'),
+        title: Text(AppLocalizations.of(context).newContact),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_outlined),
           onPressed: () {  widget.callback(0, null); },
@@ -99,11 +100,11 @@ class _AddContactState extends State<AddContact> {
                   TextFormField(
                     controller: fnCtrl,
                     focusNode: fnFocus,
-                    decoration: const InputDecoration(
-                      icon: Icon(Icons.person),
-                      hintText: 'Firstname of the contact',
-                      labelText: 'Firstname',
-                      focusedBorder: UnderlineInputBorder(
+                    decoration: InputDecoration(
+                      icon: const Icon(Icons.person),
+                      hintText: AppLocalizations.of(context).firstNameLabel,
+                      labelText: AppLocalizations.of(context).firstName,
+                      focusedBorder: const UnderlineInputBorder(
                         borderSide: BorderSide(color: Colors.deepPurple)),
                     ),
                     inputFormatters: [
@@ -112,10 +113,10 @@ class _AddContactState extends State<AddContact> {
                   ),
                   TextFormField(
                     controller: lnCtrl,
-                    decoration: const InputDecoration(
-                      icon: Icon(Icons.person),
-                      hintText: 'Lastname of the contact',
-                      labelText: 'Lastname',
+                    decoration: InputDecoration(
+                      icon: const Icon(Icons.person),
+                      hintText: AppLocalizations.of(context).lastNameLabel,
+                      labelText: AppLocalizations.of(context).lastName,
                     ),
                     inputFormatters: [
                       LengthLimitingTextInputFormatter(18)
@@ -129,8 +130,8 @@ class _AddContactState extends State<AddContact> {
                           controller: nbCtrl,
                           decoration: InputDecoration(
                             icon: const Icon(Icons.phone),
-                            hintText: 'Enter a phone number',
-                            labelText: 'Phone (+33)',
+                            hintText: AppLocalizations.of(context).phoneLabel,
+                            labelText: '${AppLocalizations.of(context).phone} (+33)',
                             errorText: _submitted ? getInputError(nbCtrl.text) : null,
                           ),
                           keyboardType: TextInputType.phone,
@@ -147,10 +148,10 @@ class _AddContactState extends State<AddContact> {
                   ),
                   TextFormField(
                     controller: emCtrl,
-                    decoration: const InputDecoration(
-                      icon: Icon(Icons.mail),
-                      hintText: 'E-mail of the contact',
-                      labelText: 'E-mail',
+                    decoration: InputDecoration(
+                      icon: const Icon(Icons.mail),
+                      hintText: AppLocalizations.of(context).emailLabel,
+                      labelText: AppLocalizations.of(context).email,
                     ),
                     inputFormatters: [
                       LengthLimitingTextInputFormatter(30)
@@ -158,10 +159,10 @@ class _AddContactState extends State<AddContact> {
                   ),
                   TextFormField(
                     controller: bdCtrl,
-                    decoration: const InputDecoration(
-                      icon: Icon(Icons.calendar_today),
-                      hintText: 'Enter a birth date',
-                      labelText: 'Birth Date',
+                    decoration: InputDecoration(
+                      icon: const Icon(Icons.calendar_today),
+                      hintText: AppLocalizations.of(context).birthDateLabel,
+                      labelText: AppLocalizations.of(context).birthDate,
                     ),
                     inputFormatters: [
                       LengthLimitingTextInputFormatter(18)
@@ -171,7 +172,7 @@ class _AddContactState extends State<AddContact> {
                     padding: const EdgeInsets.only(left: 0.0, top: 60.0),
                     child: ElevatedButton(
                       onPressed: () => registerContact(),
-                      child: const Text('Register'),
+                      child: Text(AppLocalizations.of(context).register),
                     )
                   ),
                 ],

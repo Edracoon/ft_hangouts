@@ -2,6 +2,7 @@ import 'package:flutter/material.dart'; // Flutter global import
 import 'package:flutter/services.dart'; // For TextInputFormatter and FilteringTextInputFormatter for forms
 
 import 'package:flutter_multi_formatter/flutter_multi_formatter.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../contact_model.dart';    // Contact Model
 import '../database_helper.dart';  // Database
@@ -55,8 +56,8 @@ class _EditContactState extends State<EditContact> {
   final _formKey = GlobalKey<FormState>();  
 
   getInputError(String text) {
-    if (nbCtrl.text.isEmpty) { return 'Can\'t be empty'; }
-    if (nbCtrl.text.length != 13) { return 'Incorrect format number'; }
+    if (nbCtrl.text.isEmpty) { return AppLocalizations.of(context).emptyError; }
+    if (nbCtrl.text.length != 13) { return AppLocalizations.of(context).formatError; }
     return null;
   }
 
@@ -65,8 +66,8 @@ class _EditContactState extends State<EditContact> {
     // It returns true if the form is valid, otherwise returns false
     if (_formKey.currentState!.validate() && getInputError(nbCtrl.text) == null) {
       // If the form is valid, display a Snackbar.
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-        content: Text('Saved !'),
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text(AppLocalizations.of(context).saved),
         backgroundColor: Colors.green,
       ));
 
@@ -80,8 +81,8 @@ class _EditContactState extends State<EditContact> {
 
   void deleteContact() async {
     Contact editedContact = Contact(id: contact.id, number: nbCtrl.text);
-    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-      content: Text('Deleted !'),
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      content: Text(AppLocalizations.of(context).deleted),
       backgroundColor: Colors.green,
     ));
     await DatabaseHelper.instance.delete(editedContact);
@@ -93,7 +94,7 @@ class _EditContactState extends State<EditContact> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.deepPurple,
-        title: const Text('Edit contact'),
+        title: Text(AppLocalizations.of(context).editContact),
         leading: Row(children: [
           IconButton(
             icon: const Icon(Icons.arrow_back_outlined),
@@ -121,11 +122,11 @@ class _EditContactState extends State<EditContact> {
                 children: [
                   TextFormField(
                     controller: fnCtrl,
-                    decoration: const InputDecoration(
+                    decoration: InputDecoration(
                       icon: Icon(Icons.person),
-                      hintText: 'Firstname of the contact',
-                      labelText: 'Firstname',
-                      focusedBorder: UnderlineInputBorder(
+                      hintText: AppLocalizations.of(context).firstNameLabel,
+                      labelText: AppLocalizations.of(context).firstName,
+                      focusedBorder: const UnderlineInputBorder(
                         borderSide: BorderSide(color: Colors.deepPurple)),
                     ),
                     inputFormatters: [
@@ -134,10 +135,10 @@ class _EditContactState extends State<EditContact> {
                   ),
                   TextFormField(
                     controller: lnCtrl,
-                    decoration: const InputDecoration(
-                      icon: Icon(Icons.person),
-                      hintText: 'Lastname of the contact',
-                      labelText: 'Lastname',
+                    decoration: InputDecoration(
+                      icon: const Icon(Icons.person),
+                      hintText: AppLocalizations.of(context).lastNameLabel,
+                      labelText: AppLocalizations.of(context).lastName,
                     ),
                     inputFormatters: [
                       LengthLimitingTextInputFormatter(18)
@@ -151,8 +152,8 @@ class _EditContactState extends State<EditContact> {
                           controller: nbCtrl,
                           decoration: InputDecoration(
                             icon: const Icon(Icons.phone),
-                            hintText: 'Enter a phone number',
-                            labelText: 'Phone (+33)',
+                            hintText: AppLocalizations.of(context).phoneLabel,
+                            labelText: '${AppLocalizations.of(context).phone} (+33)',
                             errorText: _submitted ? getInputError(nbCtrl.text) : null,
                           ),
                           keyboardType: TextInputType.phone,
@@ -169,10 +170,10 @@ class _EditContactState extends State<EditContact> {
                   ),
                   TextFormField(
                     controller: emCtrl,
-                    decoration: const InputDecoration(
-                      icon: Icon(Icons.mail),
-                      hintText: 'E-mail of the contact',
-                      labelText: 'E-mail',
+                    decoration: InputDecoration(
+                      icon: const Icon(Icons.mail),
+                      hintText: AppLocalizations.of(context).emailLabel,
+                      labelText: AppLocalizations.of(context).email,
                     ),
                     inputFormatters: [
                       LengthLimitingTextInputFormatter(30)
@@ -180,10 +181,10 @@ class _EditContactState extends State<EditContact> {
                   ),
                   TextFormField(
                     controller: bdCtrl,
-                    decoration: const InputDecoration(
-                      icon: Icon(Icons.calendar_today),
-                      hintText: 'Enter a birth date',
-                      labelText: 'Birth Date',
+                    decoration: InputDecoration(
+                      icon: const Icon(Icons.calendar_today),
+                      hintText: AppLocalizations.of(context).birthDateLabel,
+                      labelText: AppLocalizations.of(context).birthDate,
                     ),
                     inputFormatters: [
                       LengthLimitingTextInputFormatter(18)
@@ -193,7 +194,7 @@ class _EditContactState extends State<EditContact> {
                     padding: const EdgeInsets.only(left: 0.0, top: 60.0),
                     child: ElevatedButton(
                       onPressed: () => updateContact(),
-                      child: const Text('Register'),
+                      child: Text(AppLocalizations.of(context).register),
                     )
                   ),
                 ],

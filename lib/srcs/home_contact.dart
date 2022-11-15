@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:telephony/telephony.dart';
+
 import '../contact_model.dart';
 import '../database_helper.dart';
 import './resume_contact.dart';
@@ -27,6 +29,7 @@ class _HomeContactState extends State<HomeContact> with WidgetsBindingObserver {
   bool typing = false;
   final searchCtrl = TextEditingController();
   final focusTitle = FocusNode();
+  final Telephony telephony = Telephony.instance;
 
   void toggleType() {
     typing = !typing;
@@ -34,10 +37,18 @@ class _HomeContactState extends State<HomeContact> with WidgetsBindingObserver {
     else { searchCtrl.text = ""; }
   }
 
-
   // Init the observer of the WidgetBindingObserver
   @override
   void initState() {
+    telephony.listenIncomingSms(
+      onNewMessage: (SmsMessage message) {
+        print(message.address); // +977981******67, sender number
+        print(message.body);    // sms text
+        print(message.date);    // 1659690242000, timestamp
+      },
+      listenInBackground: false,
+    );
+
     WidgetsBinding.instance.addObserver(this);
     super.initState();
   }
@@ -75,7 +86,7 @@ class _HomeContactState extends State<HomeContact> with WidgetsBindingObserver {
             focusNode: focusTitle,
             controller: searchCtrl,
             style: const TextStyle(color: Colors.white),
-            decoration: const InputDecoration(border: InputBorder.none, hintText: 'Search', hintStyle: TextStyle(color: Color.fromARGB(255, 224, 224, 224))),
+            decoration: InputDecoration(border: InputBorder.none, hintText: AppLocalizations.of(context).search, hintStyle: const TextStyle(color: Color.fromARGB(255, 224, 224, 224))),
           )
           :
           GestureDetector(
@@ -113,10 +124,10 @@ class _HomeContactState extends State<HomeContact> with WidgetsBindingObserver {
             future: DatabaseHelper.instance.getContacts(),
             builder: (ctx, snapshot) {
               if (!snapshot.hasData) {
-                return const Center(child: Text('Loading...'));
+                return Center(child: Text(AppLocalizations.of(context).loading));
               }
               return (snapshot.data!.isEmpty
-                ? const Center(child: Text('No contact yet !'))
+                ? Center(child: Text(AppLocalizations.of(context).noContact))
                 : ListView.separated(
                     separatorBuilder: (context, index) => const Divider(
                       color: Color.fromARGB(255, 42, 42, 42),

@@ -1,3 +1,25 @@
 {
-	"setInBackground": "L'app a été mis en arrière plan à"
+	"setInBackground": "L'app a été mis en arrière plan à",
+	"register": "Enregistrer",
+	"contactRegistered": "Contact enregistré !",
+	"firstName": "Prénom",
+	"firstNameLabel": "Prénon du contact",
+	"lastName": "Nom de famille",
+	"lastNameLabel": "Nom de famille du contact",
+	"phone": "Téléphone",
+	"phoneLabel": "Entrer un numéro de téléphone",
+	"email": "E-mail",
+	"emailLabel": "E-mail du contact",
+	"birthDate": "Date de naissance",
+	"birthDateLabel": "Entrer une date de naissance",
+	"newContact": "Nouveau contact",
+	"editContact": "Modifier le contact",
+	"writeMessage": "Écrivez un message...",
+	"search": "Rechercher",
+	"loading": "Chargement ...",
+	"noContact": "Pas encore de contact !",
+	"saved": "Sauvegardé !",
+	"deleted": "Effacé !",
+	"emptyError": "Ne peut pas être vide",
+	"formatError": "Format de téléphone incorrect"
 }
