@@ -21,5 +21,9 @@
 	"saved": "Saved !",
 	"deleted": "Deleted !",
 	"emptyError": "Can't be empty",
-	"formatError": "Incorrect format number"
+	"formatError": "Incorrect format number",
+	"blue": "Blue",
+	"green": "Green",
+	"orange": "Orange",
+	"purple": "Purple"
 }

@@ -5,7 +5,9 @@ import 'package:flutter_multi_formatter/flutter_multi_formatter.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../contact_model.dart';    // Contact Model
-import '../database_helper.dart';  // Database     
+import '../database_helper.dart';  // Database   
+import './header_color.dart';
+
 
 // Defining what is the Callback type function that
 // will triger my parent widget
@@ -77,7 +79,7 @@ class _AddContactState extends State<AddContact> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.deepPurple,
+        backgroundColor: headerColorGlobal.headerColor,
         title: Text(AppLocalizations.of(context).newContact),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_outlined),
@@ -171,6 +173,7 @@ class _AddContactState extends State<AddContact> {
                   Container(
                     padding: const EdgeInsets.only(left: 0.0, top: 60.0),
                     child: ElevatedButton(
+                      style: ButtonStyle(backgroundColor: MaterialStateProperty.all<Color>(headerColorGlobal.headerColor)),
                       onPressed: () => registerContact(),
                       child: Text(AppLocalizations.of(context).register),
                     )

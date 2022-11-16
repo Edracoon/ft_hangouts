@@ -6,6 +6,8 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../contact_model.dart';    // Contact Model
 import '../database_helper.dart';  // Database
+import './header_color.dart';
+
 
 // Defining what is the Callback type function that
 // will triger my parent widget
@@ -93,7 +95,7 @@ class _EditContactState extends State<EditContact> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.deepPurple,
+        backgroundColor: headerColorGlobal.headerColor,
         title: Text(AppLocalizations.of(context).editContact),
         leading: Row(children: [
           IconButton(
@@ -193,6 +195,7 @@ class _EditContactState extends State<EditContact> {
                   Container(
                     padding: const EdgeInsets.only(left: 0.0, top: 60.0),
                     child: ElevatedButton(
+                      style: ButtonStyle(backgroundColor: MaterialStateProperty.all<Color>(headerColorGlobal.headerColor)),
                       onPressed: () => updateContact(),
                       child: Text(AppLocalizations.of(context).register),
                     )

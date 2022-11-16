@@ -21,5 +21,9 @@
 	"saved": "Sauvegardé !",
 	"deleted": "Effacé !",
 	"emptyError": "Ne peut pas être vide",
-	"formatError": "Format de téléphone incorrect"
+	"formatError": "Format de téléphone incorrect",
+	"blue": "Bleu",
+	"green": "Vert",
+	"orange": "Orange",
+	"purple": "Violet"
 }

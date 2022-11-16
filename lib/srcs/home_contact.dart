@@ -6,16 +6,18 @@ import 'package:telephony/telephony.dart';
 import '../contact_model.dart';
 import '../database_helper.dart';
 import './resume_contact.dart';
+import './header_color.dart';
+
 
 // Defining what is the Callback type function that
 // will triger my parent widget
 typedef Callback = void Function(int redirectPage, Contact? contact);
 
 class HomeContact extends StatefulWidget {
-  DateTime? dateInactive;
-
   // The callback variable
   final Callback callback;
+  DateTime? dateInactive;
+  MaterialAccentColor headerColor = headerColorGlobal.headerColor;
 
   // The constructor where we add the callback as required
   HomeContact({Key? key, required this.callback}) : super(key: key);
@@ -27,6 +29,7 @@ class HomeContact extends StatefulWidget {
 class _HomeContactState extends State<HomeContact> with WidgetsBindingObserver {
 
   bool typing = false;
+  List<Contact> contacts = [];
   final searchCtrl = TextEditingController();
   final focusTitle = FocusNode();
   final Telephony telephony = Telephony.instance;
@@ -41,10 +44,20 @@ class _HomeContactState extends State<HomeContact> with WidgetsBindingObserver {
   @override
   void initState() {
     telephony.listenIncomingSms(
-      onNewMessage: (SmsMessage message) {
-        print(message.address); // +977981******67, sender number
-        print(message.body);    // sms text
-        print(message.date);    // 1659690242000, timestamp
+      onNewMessage: (SmsMessage message) async {
+        String number = '${message.address}';
+        RegExp exp = RegExp(r"\d{2}");
+        Iterable<Match> matches = exp.allMatches(number);
+        number = '0${matches.map((m) => int.tryParse(m.group(0)!)).join(' ')}';
+        bool doContactExist = await DatabaseHelper.instance.findByNumber(number);
+        if (doContactExist == false)
+        {
+          Contact newContact = Contact(number: number);
+          setState(() {
+            contacts.add(newContact);
+          });
+          DatabaseHelper.instance.add(newContact);
+        }
       },
       listenInBackground: false,
     );
@@ -80,7 +93,7 @@ class _HomeContactState extends State<HomeContact> with WidgetsBindingObserver {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.deepPurple,
+        backgroundColor: widget.headerColor,
         title: typing ?
           TextField(
             focusNode: focusTitle,
@@ -97,23 +110,20 @@ class _HomeContactState extends State<HomeContact> with WidgetsBindingObserver {
           icon: Icon(typing ? Icons.cancel_outlined : Icons.search),
           onPressed: () { setState(toggleType); },
         ),
-        actions: const [
-          // PopupMenuButton(
-          //   onSelected: (int value) {
-          //     setState(() {
-          //       widget.headerColor = headerColorGlobal.updateColor(value);
-          //     });
-          //   },
-          //   itemBuilder: (context) => [
-          //     PopupMenuItem(child: Text(AppLocalizations.of(context)!.redLabel), value: 1),
-          //     PopupMenuItem(child: Text(AppLocalizations.of(context)!.blueLabel), value: 2,),
-          //     PopupMenuItem(child: Text(AppLocalizations.of(context)!.yellowLabel), value: 3,),
-          //     PopupMenuItem(child: Text(AppLocalizations.of(context)!.greenLabel), value: 4,),
-          //     PopupMenuItem(child: Text(AppLocalizations.of(context)!.orangeLabel), value: 5,),
-          //     PopupMenuItem(child: Text(AppLocalizations.of(context)!.purpleLabel), value: 6,),
-          //     PopupMenuItem(child: Text(AppLocalizations.of(context)!.pinkLabel), value: 7,)
-          //   ]
-          // )
+        actions: [
+          PopupMenuButton(
+            onSelected: (int value) {
+              setState(() {
+                widget.headerColor = headerColorGlobal.updateColor(value);
+              });
+            },
+            itemBuilder: (context) => [
+              PopupMenuItem(value: 1, child: Text(AppLocalizations.of(context).blue)),
+              PopupMenuItem(value: 2, child: Text(AppLocalizations.of(context).green)),
+              PopupMenuItem(value: 3, child: Text(AppLocalizations.of(context).orange)),
+              PopupMenuItem(value: 4, child: Text(AppLocalizations.of(context).purple)),
+            ]
+          )
         ],
       ),
       body: GestureDetector(
@@ -126,9 +136,11 @@ class _HomeContactState extends State<HomeContact> with WidgetsBindingObserver {
               if (!snapshot.hasData) {
                 return Center(child: Text(AppLocalizations.of(context).loading));
               }
-              return (snapshot.data!.isEmpty
-                ? Center(child: Text(AppLocalizations.of(context).noContact))
-                : ListView.separated(
+              if (snapshot.data!.isEmpty) {
+                return Center(child: Text(AppLocalizations.of(context).noContact));
+              }
+              contacts = snapshot.data!;
+              return (ListView.separated(
                     separatorBuilder: (context, index) => const Divider(
                       color: Color.fromARGB(255, 42, 42, 42),
                       height: 10,
@@ -147,8 +159,8 @@ class _HomeContactState extends State<HomeContact> with WidgetsBindingObserver {
         )
       ),
       floatingActionButton: FloatingActionButton(
-        backgroundColor: Colors.deepPurple,
-        hoverColor: Colors.deepPurple.shade600,
+        backgroundColor: widget.headerColor,
+        hoverColor: widget.headerColor,
         child: const Icon(Icons.add),
         onPressed: () { widget.callback(1, null); },
       ),

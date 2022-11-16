@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:ft_hangouts/contact_model.dart';
+import '../contact_model.dart';
+import 'package:telephony/telephony.dart';
 
 // Defining what is the Callback type function that
 // will triger my parent widget
@@ -18,6 +19,7 @@ class ResumeContact extends StatefulWidget {
 }
 
 class _ResumeContactState extends State<ResumeContact> {
+  final Telephony telephony = Telephony.instance;
 
   String getContactDescription(Contact contact) {
     if (contact.firstname == "" && contact.lastname == "") {
@@ -59,7 +61,11 @@ class _ResumeContactState extends State<ResumeContact> {
           flex: 2,
           child: IconButton(
             icon: const Icon(Icons.call, size: 25.0),
-            onPressed: () {
+            onPressed: () async {
+              bool? permCall = await telephony.requestPhonePermissions;
+              if (permCall != null && permCall) {
+                await telephony.dialPhoneNumber(widget.contact.number);
+              }
             },
           ),
         ),

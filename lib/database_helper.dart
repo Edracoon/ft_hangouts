@@ -64,4 +64,10 @@ class DatabaseHelper {
     Database db = await instance.database;
     return db.delete('contacts', where: 'id = ?', whereArgs: [contact.id]);
   }
+
+  Future<bool> findByNumber(String? number) async {
+    Database db = await instance.database;
+    List<dynamic> query = await db.query('contacts', where: 'number = ?', whereArgs: [number]);
+    return query.isNotEmpty ? true : false;
+  }
 }

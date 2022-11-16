@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 
 import 'package:telephony/telephony.dart';
-import '../contact_model.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
+import '../contact_model.dart';
+import './header_color.dart';
+import './header_color.dart';
 
 // Defining what is the Callback type function that
 // will triger my parent widget
@@ -28,6 +30,7 @@ class _ChatState extends State<Chat> {
 
   late Contact contact;
   final scrollCtrl = ScrollController();
+  final messageController = TextEditingController();
 
   @override
   void initState() {
@@ -39,7 +42,7 @@ class _ChatState extends State<Chat> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.deepPurple,
+        backgroundColor: headerColorGlobal.headerColor,
         title: Text(getContactDescription(contact)),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_outlined),
@@ -52,27 +55,38 @@ class _ChatState extends State<Chat> {
             alignment: Alignment.bottomLeft,
             child: Container(
               padding: const EdgeInsets.only(left: 10,bottom: 10,top: 10),
-              height: 60,
+              height: 70,
               width: double.infinity,
               color: Colors.white,
               child: Row(
                 children: [
                   const SizedBox(width: 15),
                   Expanded(
-                    child: TextField(
+                    child: TextFormField(
+                      controller: messageController,
                       decoration: InputDecoration(
                         hintText: AppLocalizations.of(context).writeMessage,
                         hintStyle: const TextStyle(color: Colors.black54),
-                        border: InputBorder.none
+                        border: const OutlineInputBorder(),
                       ),
                     ),
                   ),
-                  const SizedBox(width: 15,),
+                  const SizedBox(width: 15),
                   FloatingActionButton(
-                    onPressed: (){},
-                    backgroundColor: Colors.blue,
+                    onPressed: () async {
+                      bool? permSms = await telephony.requestSmsPermissions;
+                      if (permSms != null && permSms && messageController.text.isNotEmpty) {
+                        await telephony.sendSms(
+                          to: contact.number,
+                          message: messageController.text,
+                          statusListener: _msgStatusListener
+                        );
+                        messageController.text = '';
+                      }
+                    },
+                    backgroundColor: headerColorGlobal.headerColor,
                     elevation: 0,
-                    child: const Icon(Icons.send,color: Colors.white,size: 18,),
+                    child: const Icon(Icons.send,color: Colors.white, size: 25),
                   ),
                 ],
                 
@@ -94,4 +108,8 @@ String getContactDescription(Contact contact) {
     ret = "${ret.substring(0, 17)}...";
   }
   return ret;
+}
+
+// Not used in our case
+void  _msgStatusListener(SendStatus status) {
 }
