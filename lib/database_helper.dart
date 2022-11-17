@@ -3,8 +3,7 @@ import 'package:sqflite/sqflite.dart';              // User for SQLite support
 import 'package:path_provider/path_provider.dart';  // Used for GetApplicationDocumentsDirectory support
 // ignore: depend_on_referenced_packages
 import 'package:path/path.dart';                    // Used for join support
-
-import 'contact_model.dart';                         // Our Contact Model
+import './contact_model.dart';                         // Our Contact Model
 
 class DatabaseHelper {
   // It create an interface where _database is

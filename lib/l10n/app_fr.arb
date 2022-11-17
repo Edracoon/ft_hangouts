@@ -22,6 +22,7 @@
 	"deleted": "Effacé !",
 	"emptyError": "Ne peut pas être vide",
 	"formatError": "Format de téléphone incorrect",
+	"messagesEmpty": "Aucun messages avec ce contact!",
 	"blue": "Bleu",
 	"green": "Vert",
 	"orange": "Orange",

@@ -22,6 +22,7 @@
 	"deleted": "Deleted !",
 	"emptyError": "Can't be empty",
 	"formatError": "Incorrect format number",
+	"messagesEmpty": "No messages with this contact!",
 	"blue": "Blue",
 	"green": "Green",
 	"orange": "Orange",

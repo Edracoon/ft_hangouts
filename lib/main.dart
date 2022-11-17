@@ -1,15 +1,14 @@
+import 'package:flutter/material.dart'; // Flutter global import
 import 'package:flutter_localizations/flutter_localizations.dart';
 // We could add this after the flutter gen-l10n command
 // See this -> https://medium.com/@echolaojue/how-to-make-l10n-with-flutter-fd61e21e61d8
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-import 'package:flutter/material.dart'; // Flutter global import
-import 'package:ft_hangouts/contact_model.dart';
-import 'package:ft_hangouts/srcs/chat_contact.dart';
-import 'srcs/home_contact.dart';
-import 'srcs/add_contact.dart';
-import 'srcs/edit_contact.dart';
-import 'srcs/chat_contact.dart';
+import './contact_model.dart';
+import './srcs/home.dart';
+import './srcs/add.dart';
+import './srcs/edit.dart';
+import './srcs/chat.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();

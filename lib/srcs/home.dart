@@ -5,8 +5,8 @@ import 'package:telephony/telephony.dart';
 
 import '../contact_model.dart';
 import '../database_helper.dart';
-import './resume_contact.dart';
-import './header_color.dart';
+import './resume.dart';
+import '../header_color.dart';
 
 
 // Defining what is the Callback type function that

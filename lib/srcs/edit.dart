@@ -6,7 +6,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../contact_model.dart';    // Contact Model
 import '../database_helper.dart';  // Database
-import './header_color.dart';
+import '../header_color.dart';
 
 
 // Defining what is the Callback type function that

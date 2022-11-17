@@ -4,8 +4,8 @@ import 'package:telephony/telephony.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../contact_model.dart';
-import './header_color.dart';
-import './header_color.dart';
+import '../header_color.dart';
+import './message.dart';
 
 // Defining what is the Callback type function that
 // will triger my parent widget
@@ -31,6 +31,9 @@ class _ChatState extends State<Chat> {
   late Contact contact;
   final scrollCtrl = ScrollController();
   final messageController = TextEditingController();
+  final messageFocus = FocusNode();
+
+  List<SmsMessage> messages = [];
 
   @override
   void initState() {
@@ -49,25 +52,22 @@ class _ChatState extends State<Chat> {
           onPressed: () {  widget.callback(0, null); },
         ),
       ),
-      body: Stack(
+      body: Column(
         children: [
-          Align(
-            alignment: Alignment.bottomLeft,
-            child: Container(
-              padding: const EdgeInsets.only(left: 10,bottom: 10,top: 10),
-              height: 70,
-              width: double.infinity,
-              color: Colors.white,
+          createMessageList(),
+          Form(child: IntrinsicHeight(
               child: Row(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   const SizedBox(width: 15),
                   Expanded(
                     child: TextFormField(
+                      focusNode: messageFocus,
                       controller: messageController,
                       decoration: InputDecoration(
                         hintText: AppLocalizations.of(context).writeMessage,
                         hintStyle: const TextStyle(color: Colors.black54),
-                        border: const OutlineInputBorder(),
+                        border: const OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(20.0))),
                       ),
                     ),
                   ),
@@ -79,17 +79,17 @@ class _ChatState extends State<Chat> {
                         await telephony.sendSms(
                           to: contact.number,
                           message: messageController.text,
-                          statusListener: _msgStatusListener
                         );
                         messageController.text = '';
+                        messageFocus.unfocus();
                       }
                     },
                     backgroundColor: headerColorGlobal.headerColor,
                     elevation: 0,
                     child: const Icon(Icons.send,color: Colors.white, size: 25),
                   ),
+                  const SizedBox(width: 15),
                 ],
-                
               ),
             ),
           ),
@@ -97,19 +97,61 @@ class _ChatState extends State<Chat> {
       )
     );
   }
-}
 
-String getContactDescription(Contact contact) {
-  if (contact.firstname == "" && contact.lastname == "") {
-    return contact.number;
+  Widget createMessageList() {
+    retrieveAllMessage();
+    if (messages.isNotEmpty)
+    {
+      return (
+        Flexible(
+          child: ListView.builder(
+            itemCount: messages.length,
+            reverse: true,
+            itemBuilder: (context, index) => Message(messages[index], widget.contact)
+        ))
+      );
+    }
+    else {
+      return Center(
+        child: Text(AppLocalizations.of(context).messagesEmpty),
+      );
+    }
   }
-  String ret = "${contact.firstname} ${contact.lastname}";
-  if (ret.length > 20) {
-    ret = "${ret.substring(0, 17)}...";
-  }
-  return ret;
-}
 
-// Not used in our case
-void  _msgStatusListener(SendStatus status) {
+  void retrieveAllMessage() async {
+    List<SmsMessage> temp = [];
+    // Get messages sent by the contact
+    temp = await telephony.getInboxSms(
+      columns: [SmsColumn.TYPE, SmsColumn.ADDRESS, SmsColumn.BODY, SmsColumn.DATE, SmsColumn.TYPE],
+      filter: SmsFilter.where(SmsColumn.ADDRESS).equals(widget.contact.number.split(' ').join('')),
+      sortOrder: [OrderBy(SmsColumn.DATE_SENT)]
+    );
+    // Get messages that we sent to the contact
+    temp += await telephony.getSentSms(
+      columns: [SmsColumn.TYPE, SmsColumn.ADDRESS, SmsColumn.BODY, SmsColumn.DATE, SmsColumn.TYPE],
+      filter: SmsFilter.where(SmsColumn.ADDRESS).equals(widget.contact.number.split(' ').join('')),
+      sortOrder: [OrderBy(SmsColumn.DATE)]
+    );
+    // Sort the messages by date so they mix them up (Sent and Received)
+    temp.sort((a, b) {
+      DateTime m1Date = DateTime.fromMicrosecondsSinceEpoch(a.date! * 1000, isUtc: false).toLocal();
+      DateTime m2Date = DateTime.fromMicrosecondsSinceEpoch(b.date! * 1000, isUtc: false).toLocal();
+            
+      return m2Date.compareTo(m1Date);
+    });
+    setState(() {
+      messages = temp;
+    });
+  }
+
+    String getContactDescription(Contact contact) {
+      if (contact.firstname == "" && contact.lastname == "") {
+        return contact.number;
+      }
+      String ret = "${contact.firstname} ${contact.lastname}";
+      if (ret.length > 20) {
+        ret = "${ret.substring(0, 17)}...";
+      }
+      return ret;
+    }
 }
